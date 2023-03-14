@@ -21,11 +21,9 @@ class ETL:
 
     def pipeline(self):
         # High-level function caling all steps sequentially
-
         etl.import_data_df()
         etl.clean_data_pipeline()
         etl.create_train_test_datasets()
-
 
     def import_data_df(self):
         # import data from csv file
