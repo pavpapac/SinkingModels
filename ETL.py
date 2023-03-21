@@ -4,6 +4,7 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.impute import KNNImputer
 
+
 class ETL:
 
     def __init__(self, path, list_cat, list_num, target_label):
@@ -40,7 +41,7 @@ class ETL:
         self.feature_names = self._feature_names(X_df)
 
     def create_train_test_datasets(self, test_size=0.20):
-        # Now create the final traina nd test datasets with a pre-determined ratio
+        # Now create the final train and test datasets with a pre-determined ratio
         X = np.array(self.X_df)
         y = np.array(self.y_df)
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=test_size)
@@ -67,8 +68,8 @@ class ETL:
         return X_df, y_df
 
     def _append_existsNaN(self, X_df):
-        # if NaN exists append a boolean label in the features. This can stay as a feature column as it says something about
-        # the data
+        # if NaN exists append a boolean label in the features. This can stay as a feature column
+        # as it says something about the data
         exists_NaN_df = pd.DataFrame(np.int16(X_df.isna().sum(axis=1) == True), columns=['exists_NaN'])
         X_df = pd.concat([X_df, exists_NaN_df], axis=1)
 
@@ -83,7 +84,6 @@ class ETL:
         return X_df
 
     def _feature_names(self, X_df):
-
         return np.array(X_df.columns)
 
 
