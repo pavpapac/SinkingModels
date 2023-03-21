@@ -18,12 +18,13 @@ class ETL:
         self.y_train = pd.DataFrame()
         self.X_test = pd.DataFrame()
         self.y_test = pd.DataFrame()
+        self.feature_names = np.array([])
 
     def pipeline(self):
-        # High-level function caling all steps sequentially
-        etl.import_data_df()
-        etl.clean_data_pipeline()
-        etl.create_train_test_datasets()
+        # High-level function calling all steps sequentially
+        self.import_data_df()
+        self.clean_data_pipeline()
+        self.create_train_test_datasets()
 
     def import_data_df(self):
         # import data from csv file
@@ -36,6 +37,7 @@ class ETL:
         X_df, self.y_df = self._create_features_labels(num_df, cat_df, self.target_label)
         X_df = self._append_existsNaN(X_df)
         self.X_df = self._impute_with_KNN(X_df)
+        self.feature_names = self._feature_names(X_df)
 
     def create_train_test_datasets(self, test_size=0.20):
         # Now create the final traina nd test datasets with a pre-determined ratio
@@ -79,6 +81,10 @@ class ETL:
         X_df = pd.DataFrame(imputer.fit_transform(X_df), columns=np.array(X_df.columns))
 
         return X_df
+
+    def _feature_names(self, X_df):
+
+        return np.array(X_df.columns)
 
 
 if __name__ == '__main__':
