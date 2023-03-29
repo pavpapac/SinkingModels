@@ -51,7 +51,7 @@ class Models:
 
         self.feature_scores_df['Feature name'] = feature_names
         self.feature_scores_df['Feature score'] = estimator.feature_importances_
-        self.feature_scores_df = self.feature_scores_df.sort_values(by='Feature score', ascending=False)
+        self.feature_scores_df.sort_values(by='Feature score', ascending=True, inplace=True)
 
 if __name__ == "__main__":
     etl = ETL(path='./Data/titanic/train.csv')
