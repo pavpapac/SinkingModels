@@ -13,9 +13,9 @@ class Models:
         self.rf = RandomForestClassifier()
         self.ebm = ExplainableBoostingClassifier()
         self.gbc = GradientBoostingClassifier()
-
         self.init_models = [self.lgr, self.rf, self.gbc, self.ebm]
-        self.model_bag_df = pd.DataFrame(columns=['trained_models', 'accuracy'])
+        self.model_bag_df = pd.DataFrame(columns=['Model name', 'Trained estimator', 'accuracy'])
+        self.model_bag_df['Model name'] = ['Logistic Regr', 'Random Forest', 'Explain Boost', 'Grad Boost']
 
     def model_bag(self, X_train, y_train, X_test, y_test):
         # Create a bag with trained estimators and their reported accuracy
@@ -27,7 +27,7 @@ class Models:
             accuracy = self.test_model(model, X_test, y_test)
             trained_models.append(trained_model)
             test_acc.append(accuracy)
-        self.model_bag_df['trained_models'] = trained_models
+        self.model_bag_df['Trained estimator'] = trained_models
         self.model_bag_df['accuracy'] = test_acc
 
     def train_model(self, estimator, X_train, y_train):

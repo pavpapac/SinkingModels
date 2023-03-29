@@ -20,6 +20,7 @@ class ETL:
         self.X_test = pd.DataFrame()
         self.y_test = pd.DataFrame()
         self.feature_names = np.array([])
+        self.columns = np.array([])
 
     def pipeline(self):
         # High-level function calling all steps sequentially
@@ -30,6 +31,7 @@ class ETL:
     def import_data_df(self):
         # import data from csv file
         self.data_df = pd.read_csv(str(self.path))
+        self.columns = np.array(self.data_df.columns)
 
     def clean_data_pipeline(self):
         # Pipeline of actions to clean up and prepare datasets prior to splitting in train and test
