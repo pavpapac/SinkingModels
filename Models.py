@@ -13,6 +13,7 @@ class Models:
         self.rf = RandomForestClassifier()
         self.ebm = ExplainableBoostingClassifier()
         self.gbc = GradientBoostingClassifier()
+
         self.init_models = [self.lgr, self.rf, self.gbc, self.ebm]
         self.model_bag_df = pd.DataFrame(columns=['trained_models', 'accuracy'])
 
