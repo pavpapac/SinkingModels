@@ -41,15 +41,19 @@ class Models:
         # Given a trained estimator, make prediction and check accuracy on test set
 
         y_pred = estimator.predict(X_test)
+        y_pred = y_pred.reshape(-1,1)
         acc = np.sum(y_pred == y_test) / np.size(y_pred == y_test)
 
         return acc
 
 
 if __name__ == "__main__":
-    etl = ETL(path='./Data/titanic/train.csv', list_cat=['Sex', 'Embarked'],
-              list_num=['Age', 'SibSp', 'Pclass', 'Parch', 'Fare'], target_label='Survived')
-    etl.pipeline()
+    etl = ETL(path='./Data/titanic/train.csv')
+    etl.import_data_df()
+    list_cat = ['Sex', 'Embarked']
+    list_num = ['Age', 'SibSp', 'Pclass', 'Parch', 'Fare']
+    target_label = ['Survived']
+    etl.preprocess_pipeline(list_cat, list_num, target_label)
     models = Models()
     models.model_bag(etl.X_train, etl.y_train, etl.X_test, etl.y_test)
     print("Accuracy per model: ", models.model_bag_df)

@@ -27,13 +27,13 @@ class ETL:
         self.data_df = pd.read_csv(str(self.path))
         self.columns = np.array(self.data_df.columns)
 
-    def preprocess_pipeline(self, list_cat, list_num, target_label):
+    def preprocess_pipeline(self, list_cat, list_num, target_label, test_size=0.20):
         # High-level function calling all pre-processing steps sequentially
         self.list_cat = list_cat
         self.list_num = list_num
         self.target_label = target_label
         self.clean_data_pipeline()
-        self.create_train_test_datasets()
+        self.create_train_test_datasets(test_size=test_size)
 
     def clean_data_pipeline(self):
         # Clean up and prepare datasets prior to splitting in train and test
@@ -92,9 +92,10 @@ class ETL:
 
 if __name__ == '__main__':
     etl = ETL(path='./Data/titanic/train.csv')
+    etl.import_data_df()
     list_cat = ['Sex', 'Embarked']
     list_num = ['Age', 'SibSp', 'Pclass', 'Parch', 'Fare']
     target_label = ['Survived']
-    etl.import_data_df()
-    etl.preprocess_pipeline(list_cat, list_num, target_label)
+    test_size=0.20
+    etl.preprocess_pipeline(list_cat, list_num, target_label, test_size)
     print(etl.X_train)

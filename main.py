@@ -3,12 +3,11 @@ from Models import Models
 import streamlit as st
 import numpy as np
 
-etl = ETL(path='./Data/titanic/train.csv', list_cat=['Sex', 'Embarked'],
-          list_num=['Age', 'SibSp', 'Pclass', 'Parch', 'Fare'], target_label='Survived')
-
+etl = ETL(path='./Data/titanic/train.csv')
 etl.import_data_df()
 list_of_features = etl.columns
-st.write("Training Data", etl.data_df)
+st.write("Raw Data ( .csv)", etl.data_df)
+
 target_label = st.sidebar.multiselect(
     'Choose target label',
     etl.columns,
@@ -26,18 +25,12 @@ list_cat = st.sidebar.multiselect(
 
 test_size = st.sidebar.slider('test size', min_value=0.1, max_value=1.0, value=0.20, step=0.05)
 
-st.write('You selected to train a model with numerical features:', np.array(list_num), np.array(list_cat))
-st.write('Your selected target label is:', target_label)
-st.write('Your selected test size is ', test_size)
+#st.write('You selected to train a model with numerical features:', np.array(list_num), np.array(list_cat))
+#st.write('Your selected target label is:', target_label)
+#st.write('Your selected test size is ', test_size)
 
-etl.list_cat = list_cat
-etl.list_num = list_num
-etl.target_label = target_label
-
-etl.clean_data_pipeline()
-etl.create_train_test_datasets(test_size=test_size)
-
-st.write(etl.X_test.shape)
+etl.preprocess_pipeline(list_cat, list_num, target_label, test_size)
+#st.write(etl.X_test.shape)
 
 if st.sidebar.button("Train models"):
     models = Models()
