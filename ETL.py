@@ -7,11 +7,8 @@ from sklearn.impute import KNNImputer
 
 class ETL:
 
-    def __init__(self, path, list_cat, list_num, target_label):
+    def __init__(self, path):
         self.path = path
-        self.list_cat = list_cat
-        self.list_num = list_num
-        self.target_label = target_label
         self.data_df = pd.DataFrame()
         self.X_df = pd.DataFrame()
         self.y_df = pd.DataFrame()
@@ -21,20 +18,25 @@ class ETL:
         self.y_test = pd.DataFrame()
         self.feature_names = np.array([])
         self.columns = np.array([])
-
-    def pipeline(self):
-        # High-level function calling all steps sequentially
-        self.import_data_df()
-        self.clean_data_pipeline()
-        self.create_train_test_datasets()
+        self.list_cat = np.array([])
+        self.list_num = np.array([])
+        self.target_label = np.array([])
 
     def import_data_df(self):
-        # import data from csv file
+        # Import data from the original csv file. CSV file is expected to have column names on the first row
         self.data_df = pd.read_csv(str(self.path))
         self.columns = np.array(self.data_df.columns)
 
+    def preprocess_pipeline(self, list_cat, list_num, target_label):
+        # High-level function calling all pre-processing steps sequentially
+        self.list_cat = list_cat
+        self.list_num = list_num
+        self.target_label = target_label
+        self.clean_data_pipeline()
+        self.create_train_test_datasets()
+
     def clean_data_pipeline(self):
-        # Pipeline of actions to clean up and prepare datasets prior to splitting in train and test
+        # Clean up and prepare datasets prior to splitting in train and test
         cat_df = self._encode_categorical()
         num_df = self._select_numerical()
         X_df, self.y_df = self._create_features_labels(num_df, cat_df, self.target_label)
@@ -50,7 +52,6 @@ class ETL:
 
     def _encode_categorical(self):
         # encode categorical data, so that we can use them together with numerical
-
         categorical_data = self.data_df[self.list_cat].values
         enc = OrdinalEncoder()
         categorical_data_encoded = enc.fit_transform(categorical_data)
@@ -90,7 +91,10 @@ class ETL:
 
 
 if __name__ == '__main__':
-    etl = ETL(path='./Data/titanic/train.csv', list_cat=['Sex', 'Embarked'],
-              list_num=['Age', 'SibSp', 'Pclass', 'Parch', 'Fare'], target_label='Survived')
-
-    etl.pipeline()
+    etl = ETL(path='./Data/titanic/train.csv')
+    list_cat = ['Sex', 'Embarked']
+    list_num = ['Age', 'SibSp', 'Pclass', 'Parch', 'Fare']
+    target_label = ['Survived']
+    etl.import_data_df()
+    etl.preprocess_pipeline(list_cat, list_num, target_label)
+    print(etl.X_train)
