@@ -1,7 +1,7 @@
 from ETL import ETL
 from Models import Models
 import streamlit as st
-import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 etl = ETL(path='./Data/titanic/train.csv')
 etl.import_data_df()
@@ -10,18 +10,15 @@ etl.import_data_df()
 
 target_label = st.sidebar.multiselect(
     'Choose target label',
-    etl.columns,
-    'Survived')
+    etl.columns)
 
 list_num = st.sidebar.multiselect(
     'Choose numerical features',
-    etl.columns,
-    ['Age', 'SibSp', 'Pclass', 'Parch', 'Fare'])
+    etl.columns)
 
 list_cat = st.sidebar.multiselect(
     'Choose categorical features',
-    etl.columns,
-    ['Sex', 'Embarked'])
+    etl.columns)
 
 test_size = st.sidebar.slider('test size', min_value=0.1, max_value=1.0, value=0.20, step=0.05)
 
@@ -35,10 +32,25 @@ if st.sidebar.button("Train models"):
     models.model_bag(etl.X_train, etl.y_train, etl.X_test, etl.y_test)
     models.feature_importance(etl.feature_names, models.rf)
     st.write('### Model comparison')
-    st.bar_chart(data=models.model_bag_df, x='Model name', y='accuracy')
+
+    fig1 = go.Figure()
+    fig1.add_trace(go.Bar(
+        x=models.model_bag_df['Model name'],
+        y=models.model_bag_df['accuracy'],
+        name='accuracy',
+        orientation='v',
+    ))
+    st.plotly_chart(fig1)
     st.write('### Feature importance')
-    fig = plt.figure()
-    plt.barh(models.feature_scores_df['Feature name'], width=models.feature_scores_df['Feature score'], align='center')
-    st.pyplot(fig)
+
+    fig2 = go.Figure()
+    fig2.add_trace(go.Bar(
+        y=models.feature_scores_df['Feature name'],
+        x=models.feature_scores_df['Feature score'],
+        name='',
+        orientation='h',
+    ))
+    st.plotly_chart(fig2)
+
 else:
     st.write("### Raw Data ( .csv)", etl.data_df)
