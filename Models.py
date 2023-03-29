@@ -42,7 +42,7 @@ class Models:
         # Given a trained estimator, make prediction and check accuracy on test set
 
         y_pred = estimator.predict(X_test)
-        y_pred = y_pred.reshape(-1,1)
+        y_pred = y_pred.reshape(-1, 1)
         acc = np.sum(y_pred == y_test) / np.size(y_pred == y_test)
 
         return acc
@@ -51,7 +51,7 @@ class Models:
 
         self.feature_scores_df['Feature name'] = feature_names
         self.feature_scores_df['Feature score'] = estimator.feature_importances_
-        self.feature_scores_df.sort_values(by='Feature score', inplace=True, ascending=False)
+        self.feature_scores_df = self.feature_scores_df.sort_values(by='Feature score', ascending=False)
 
 if __name__ == "__main__":
     etl = ETL(path='./Data/titanic/train.csv')
