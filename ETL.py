@@ -96,6 +96,6 @@ if __name__ == '__main__':
     list_cat = ['Sex', 'Embarked']
     list_num = ['Age', 'SibSp', 'Pclass', 'Parch', 'Fare']
     target_label = ['Survived']
-    test_size=0.20
+    test_size = 0.20
     etl.preprocess_pipeline(list_cat, list_num, target_label, test_size)
     print(etl.X_train)
